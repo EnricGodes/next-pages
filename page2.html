@@ -508,8 +508,12 @@
 
     /* ==================== SECTION G: GPS TRACKING ==================== */
     function startTracking() {
+      console.log('✓ startTracking() called');
+
       if (!('geolocation' in navigator)) {
-        showError('Tu dispositivo no soporta GPS.');
+        const msg = 'Tu dispositivo no soporta GPS.';
+        console.error('✗', msg);
+        showError(msg);
         return;
       }
 
@@ -519,17 +523,28 @@
         timeout: 10000,
       };
 
-      state.watchId = navigator.geolocation.watchPosition(
-        onPositionUpdate,
-        onPositionError,
-        options
-      );
+      console.log('✓ Calling watchPosition with options:', options);
+      try {
+        startPositionTimeout();  // Start 15-second timeout
+        state.watchId = navigator.geolocation.watchPosition(
+          onPositionUpdate,
+          onPositionError,
+          options
+        );
+        console.log('✓ watchPosition started, ID:', state.watchId);
+      } catch (err) {
+        console.error('✗ watchPosition error:', err);
+        clearPositionTimeout();
+        showError('Error al iniciar GPS: ' + err.message);
+      }
     }
 
     function onPositionUpdate(pos) {
       const { latitude: lat, longitude: lng, heading, accuracy } = pos.coords;
+      console.log('✓ Position update:', lat.toFixed(4), lng.toFixed(4), 'accuracy:', accuracy.toFixed(0) + 'm');
       state.lastPosition = pos.coords;
       state.heading = heading;
+      clearPositionTimeout();  // Got position, clear timeout
 
       // Update user marker
       updateUserMarker(lat, lng, heading);
@@ -557,12 +572,30 @@
     }
 
     function onPositionError(err) {
+      console.error('✗ Geolocation error code:', err.code, 'message:', err.message);
       const msgs = {
-        1: 'Permiso de ubicación denegado. Actívalo en ajustes.',
+        1: 'Permiso de ubicación denegado. Actívalo en ajustes del navegador.',
         2: 'Posición no disponible. Asegúrate de tener señal GPS.',
         3: 'Tiempo de espera agotado. Muévete a un lugar con mejor señal.',
       };
-      showError(msgs[err.code] || 'Error de ubicación desconocido.');
+      const msg = msgs[err.code] || 'Error de ubicación desconocido.';
+      console.error('✗ Showing error:', msg);
+      showError(msg);
+    }
+
+    // Timeout: if no position in 15 seconds, show error
+    let positionTimeoutId = null;
+    function startPositionTimeout() {
+      positionTimeoutId = setTimeout(() => {
+        if (state.lastPosition === null) {
+          console.error('✗ No position after 15 seconds');
+          showError('No se pudo obtener tu ubicación. Verifica los permisos.');
+        }
+      }, 15000);
+    }
+
+    function clearPositionTimeout() {
+      if (positionTimeoutId) clearTimeout(positionTimeoutId);
     }
 
     /* ==================== SECTION H: STEP ADVANCEMENT ==================== */
@@ -679,14 +712,35 @@
       initMap();
 
       // Permission overlay buttons
-      document.getElementById('start-tracking-btn').addEventListener('click', () => {
-        document.getElementById('permission-overlay').style.display = 'none';
-        document.getElementById('step-instruction').textContent = 'Solicitando ubicación...';
-        startTracking();
+      const startBtn = document.getElementById('start-tracking-btn');
+      const denyBtn = document.getElementById('deny-tracking-btn');
+      const overlay = document.getElementById('permission-overlay');
+
+      console.log('✓ Buttons found:', startBtn, denyBtn, overlay);
+
+      startBtn.addEventListener('click', (e) => {
+        console.log('✓ Start tracking button clicked');
+        e.preventDefault();
+        e.stopPropagation();
+
+        startBtn.disabled = true;
+        startBtn.textContent = 'Solicitando permiso...';
+        overlay.style.display = 'none';
+
+        console.log('✓ About to call startTracking()');
+        try {
+          startTracking();
+          console.log('✓ startTracking() called successfully');
+        } catch (err) {
+          console.error('✗ Error in startTracking():', err);
+          showError('Error al iniciar geolocalización: ' + err.message);
+        }
       });
 
-      document.getElementById('deny-tracking-btn').addEventListener('click', () => {
-        document.getElementById('permission-overlay').style.display = 'none';
+      denyBtn.addEventListener('click', (e) => {
+        console.log('✓ Deny button clicked');
+        e.preventDefault();
+        overlay.style.display = 'none';
         document.getElementById('step-instruction').textContent = 'Sin permiso de ubicación no puedo guiarte.';
       });
     });
