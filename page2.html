@@ -323,14 +323,21 @@
   <!-- LOCATE ME BUTTON -->
   <button id="locate-btn" aria-label="Centrar en mi posición">⊕</button>
 
+  <!-- PERMISSION OVERLAY (shown initially on iOS) -->
+  <div id="permission-overlay" style="position: fixed; inset: 0; background-color: var(--bg-page); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2500; padding: 2rem; text-align: center;">
+    <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-primary);">¿Dónde estás?</h2>
+    <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.5;">Esta app necesita acceso a tu ubicación para guiarte paso a paso hasta Avenida Mistral.</p>
+    <button id="start-tracking-btn" style="padding: 0.75rem 2rem; background-color: var(--bg-button); color: var(--text-on-button); border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-weight: 600; width: 100%; max-width: 250px; margin-bottom: 1rem;">Permitir ubicación</button>
+    <button id="deny-tracking-btn" style="padding: 0.75rem 2rem; background-color: transparent; color: var(--accent-step); border: 2px solid var(--accent-step); border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-weight: 600; width: 100%; max-width: 250px;">Cancelar</button>
+  </div>
+
   <!-- BOTTOM PANEL -->
   <div id="bottom-panel">
     <div id="panel-handle"></div>
     <div id="step-counter">— / —</div>
-    <p id="step-instruction">Solicitando ubicación...</p>
+    <p id="step-instruction">Calculando ruta...</p>
     <p id="step-distance"></p>
     <p id="step-accuracy"></p>
-    <button id="start-nav-btn" style="display: none; margin-top: 1rem; padding: 0.75rem 1.5rem; background-color: var(--bg-button); color: var(--text-on-button); border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-weight: 600; width: 100%; max-width: 100%;">Permitir ubicación y empezar</button>
   </div>
 
   <!-- ARRIVAL BANNER -->
@@ -670,14 +677,17 @@
     document.addEventListener('DOMContentLoaded', () => {
       applyStoredTheme();
       initMap();
-      // Show start button instead of auto-starting (iOS compatibility)
-      document.getElementById('step-instruction').textContent = 'Toca el botón para permitir acceso a tu ubicación';
-      document.getElementById('start-nav-btn').style.display = 'block';
 
-      document.getElementById('start-nav-btn').addEventListener('click', () => {
-        document.getElementById('start-nav-btn').style.display = 'none';
+      // Permission overlay buttons
+      document.getElementById('start-tracking-btn').addEventListener('click', () => {
+        document.getElementById('permission-overlay').style.display = 'none';
         document.getElementById('step-instruction').textContent = 'Solicitando ubicación...';
         startTracking();
+      });
+
+      document.getElementById('deny-tracking-btn').addEventListener('click', () => {
+        document.getElementById('permission-overlay').style.display = 'none';
+        document.getElementById('step-instruction').textContent = 'Sin permiso de ubicación no puedo guiarte.';
       });
     });
   </script>
