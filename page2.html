@@ -327,6 +327,7 @@
     <p id="step-instruction">Solicitando ubicación...</p>
     <p id="step-distance"></p>
     <p id="step-accuracy"></p>
+    <button id="start-nav-btn" style="display: none; margin-top: 1rem; padding: 0.75rem 1.5rem; background-color: var(--bg-button); color: var(--text-on-button); border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-weight: 600; width: 100%; max-width: 100%;">Permitir ubicación y empezar</button>
   </div>
 
   <!-- ARRIVAL BANNER -->
@@ -666,7 +667,15 @@
     document.addEventListener('DOMContentLoaded', () => {
       applyStoredTheme();
       initMap();
-      startTracking();
+      // Show start button instead of auto-starting (iOS compatibility)
+      document.getElementById('step-instruction').textContent = 'Toca el botón para permitir acceso a tu ubicación';
+      document.getElementById('start-nav-btn').style.display = 'block';
+
+      document.getElementById('start-nav-btn').addEventListener('click', () => {
+        document.getElementById('start-nav-btn').style.display = 'none';
+        document.getElementById('step-instruction').textContent = 'Solicitando ubicación...';
+        startTracking();
+      });
     });
   </script>
 </body>
