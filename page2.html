@@ -299,7 +299,8 @@
         let latLng = null;
         if (instr.index != null && coordinates && coordinates[instr.index]) {
           const c = coordinates[instr.index];
-          latLng = { lat: c[0], lng: c[1] };
+          // LRM returns L.LatLng objects (with .lat/.lng), not arrays
+          latLng = { lat: c.lat != null ? c.lat : c[0], lng: c.lng != null ? c.lng : c[1] };
         }
         return {
           instruction: `${verb}${road}${exit}`,
@@ -437,14 +438,19 @@
     function advanceStepIfNeeded(lat, lng) {
       if (state.currentStepIdx >= state.steps.length - 1) return;
 
-      // Check against NEXT step's waypoint to see if we've reached it
-      const nextIdx = state.currentStepIdx + 1;
-      const nextStep = state.steps[nextIdx];
-      if (!nextStep || !nextStep.latLng) return;
+      // Check ALL remaining steps (not just next) in case user skips some
+      let bestIdx = state.currentStepIdx;
+      for (let i = state.currentStepIdx + 1; i < state.steps.length; i++) {
+        const step = state.steps[i];
+        if (!step.latLng) continue;
+        const dist = haversine(lat, lng, step.latLng.lat, step.latLng.lng);
+        if (dist <= STEP_ADVANCE_RADIUS) {
+          bestIdx = i;
+        }
+      }
 
-      const dist = haversine(lat, lng, nextStep.latLng.lat, nextStep.latLng.lng);
-      if (dist <= STEP_ADVANCE_RADIUS) {
-        state.currentStepIdx = nextIdx;
+      if (bestIdx > state.currentStepIdx) {
+        state.currentStepIdx = bestIdx;
         updateStepUI();
         if (navigator.vibrate) navigator.vibrate(100);
       }
