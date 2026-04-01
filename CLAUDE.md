@@ -16,7 +16,8 @@ A location-based historical expedition through 19th-century Barcelona, tracing t
 │   ├── carrer-fonollar-20.html        — Carrer del Fonollar 20 stop
 │   ├── navegacion-2.html              — Walking directions to Mestres Casals i Martorell 14
 │   ├── claveguera-14.html             — Claveguera 14 stop (1860-1864)
-│   └── navegacion-3.html              — Walking directions to Plaça de Sant Agustí Vell 19
+│   ├── navegacion-3.html              — Walking directions to Plaça de Sant Agustí Vell 19
+│   └── restaurant.html                — GPS navigation to Restaurant La Fonda (final destination)
 ├── navegacion/                        — GPS navigation app
 │   ├── destino.html                   — Destination input with geocoding
 │   └── ruta.html                      — Step-by-step turn-by-turn navigation
@@ -26,7 +27,7 @@ A location-based historical expedition through 19th-century Barcelona, tracing t
 ```
 
 ### User flow
-`index.html` → `experiencia/navegacion-1.html` → `experiencia/carrer-fonollar-20.html` → `experiencia/navegacion-2.html` → `experiencia/claveguera-14.html` → `experiencia/navegacion-3.html`
+`index.html` → `experiencia/navegacion-1.html` → `experiencia/carrer-fonollar-20.html` → `experiencia/navegacion-2.html` → `experiencia/claveguera-14.html` → `experiencia/navegacion-3.html` → ... → `experiencia/restaurant.html`
 
 ## Local Development
 
