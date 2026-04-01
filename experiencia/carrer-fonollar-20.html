@@ -93,8 +93,8 @@
     #lightbox.show { display: flex; }
     #lightbox img { max-width: 92vw; max-height: 90vh; object-fit: contain; box-shadow: 0 0 60px rgba(29,28,22,0.3); }
     .quiz-option { transition: all 0.3s; }
-    .quiz-option.correct { background-color: #2d5016; border-color: #4ade80; }
-    .quiz-option.incorrect { background-color: #4a1c1c; border-color: #ef4444; opacity: 0.6; }
+    .quiz-option.correct { background-color: #3d342a; border-color: #e4c375; }
+    .quiz-option.incorrect { background-color: #2b251e; border-color: #7e7667; opacity: 0.5; }
     .quiz-option.disabled { pointer-events: none; }
     #quiz-feedback { display: none; }
     #quiz-feedback.show { display: block; }
@@ -167,14 +167,17 @@
   </section>
 
   <!-- ============ AUDIOGUÍA ============ -->
-  <section class="bg-surface-container p-6 flex items-center gap-4">
-    <button id="audio-btn" class="w-14 h-14 flex-shrink-0 bg-primary text-on-primary flex items-center justify-center hover:bg-primary-fixed-dim transition-all active:scale-95">
-      <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-    </button>
-    <div>
-      <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold" data-ca="Audioguia" data-es="Audioguía">Audioguia</p>
-      <p class="font-body text-sm text-on-surface-variant" data-ca="Prem play per escoltar la història" data-es="Pulsa play para escuchar la historia">Prem play per escoltar la història</p>
+  <section class="bg-surface-container p-6 space-y-4">
+    <div class="flex items-center gap-4">
+      <span class="material-symbols-outlined text-2xl text-primary" style="font-variation-settings: 'FILL' 1;">headphones</span>
+      <div>
+        <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold" data-ca="Audioguia" data-es="Audioguía">Audioguia</p>
+        <p class="font-body text-sm text-on-surface-variant" data-ca="Prem play per escoltar la història" data-es="Pulsa play para escuchar la historia">Prem play per escoltar la història</p>
+      </div>
     </div>
+    <audio id="audio-player" controls preload="none" class="w-full" style="height: 40px;">
+      <source id="audio-source" src="../recursos/audio/fonollar-20-cat.mp3" type="audio/mpeg">
+    </audio>
   </section>
 
   <!-- ============ TEXTO INTRODUCTORIO ============ -->
@@ -334,34 +337,18 @@
 
 <script src="../js/shared.js"></script>
 <script>
-  // Audio
-  const AUDIO_SRC = {
-    ca: '../recursos/audio/fonollar-20-cat.mp3',
-    es: '../recursos/audio/fonollar-20-esp.mp3'
-  };
-  let audio = null;
-  let audioPlaying = false;
-  const audioBtn = document.getElementById('audio-btn');
-  const audioIcon = audioBtn.querySelector('.material-symbols-outlined');
-  audioBtn.addEventListener('click', () => {
-    const currentLang = localStorage.getItem('lang') || 'ca';
-    if (!audio) {
-      audio = new Audio(AUDIO_SRC[currentLang]);
-      audio.addEventListener('ended', () => {
-        audioPlaying = false;
-        audioIcon.textContent = 'play_arrow';
-      });
-    }
-    if (audioPlaying) {
-      audio.pause();
-      audioPlaying = false;
-      audioIcon.textContent = 'play_arrow';
-    } else {
-      audio.src = AUDIO_SRC[currentLang];
-      audio.play();
-      audioPlaying = true;
-      audioIcon.textContent = 'pause';
-    }
+  // Audio - switch source on language change
+  const AUDIO_SRC = { ca: '../recursos/audio/fonollar-20-cat.mp3', es: '../recursos/audio/fonollar-20-esp.mp3' };
+  const audioPlayer = document.getElementById('audio-player');
+  const audioSource = document.getElementById('audio-source');
+  function updateAudioSrc() {
+    const l = localStorage.getItem('lang') || 'ca';
+    audioSource.src = AUDIO_SRC[l];
+    audioPlayer.load();
+  }
+  updateAudioSrc();
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', updateAudioSrc);
   });
 
   // Lightbox
