@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="light" lang="ca"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Claveguera, 14 - Rere les passes de la família Godes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;0,900;1,400;1,700&amp;family=Manrope:wght@300;400;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary-fixed-variant": "#4a4644",
+            "surface-container-highest": "#e7e2d9",
+            "on-surface-variant": "#4d4639",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#e4c375",
+            "surface-container": "#f2ede4",
+            "secondary-container": "#e5dedb",
+            "outline": "#7e7667",
+            "tertiary-fixed": "#fdddba",
+            "inverse-on-surface": "#f5f0e7",
+            "surface-bright": "#fef9f0",
+            "primary-fixed": "#ffdf97",
+            "tertiary-fixed-dim": "#e0c1a0",
+            "inverse-surface": "#32302a",
+            "on-primary-fixed-variant": "#5a4300",
+            "on-error": "#ffffff",
+            "surface-variant": "#e7e2d9",
+            "primary-fixed-dim": "#e4c375",
+            "error": "#ba1a1a",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#ded9d1",
+            "surface-container-high": "#ece8df",
+            "primary-container": "#8c712d",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#584329",
+            "secondary-fixed-dim": "#cbc5c2",
+            "surface-container-low": "#f8f3ea",
+            "tertiary": "#6f583d",
+            "primary": "#715915",
+            "on-secondary-container": "#66625f",
+            "surface-tint": "#745b18",
+            "on-background": "#1d1c16",
+            "error-container": "#ffdad6",
+            "outline-variant": "#d0c5b4",
+            "tertiary-container": "#897053",
+            "background": "#fef9f0",
+            "on-tertiary-container": "#fffbff",
+            "on-primary-container": "#fffbff",
+            "on-secondary-fixed": "#1e1b19",
+            "on-tertiary-fixed": "#281804",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#251a00",
+            "secondary-fixed": "#e8e1de",
+            "on-secondary": "#ffffff",
+            "on-surface": "#1d1c16",
+            "surface": "#fef9f0",
+            "secondary": "#625e5b"
+          },
+          fontFamily: {
+            "headline": ["Noto Serif"],
+            "body": ["Manrope"],
+            "label": ["Manrope"]
+          },
+          borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+        },
+      },
+    }
+</script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+    .vellum-texture {
+      background-color: #2b251e;
+    }
+    .sepia-overlay { filter: sepia(0.4) contrast(1.1) brightness(0.95); }
+    #menu-overlay {
+      display: none; position: fixed; inset: 0;
+      background-color: rgba(29, 28, 22, 0.5); z-index: 55;
+    }
+    #menu-overlay.show { display: block; }
+    #lightbox {
+      display: none; position: fixed; inset: 0;
+      background-color: rgba(29, 28, 22, 0.85);
+      z-index: 200; cursor: pointer;
+      justify-content: center; align-items: center;
+    }
+    #lightbox.show { display: flex; }
+    #lightbox img { max-width: 92vw; max-height: 90vh; object-fit: contain; box-shadow: 0 0 60px rgba(29,28,22,0.3); }
+    .quiz-option { transition: all 0.3s; }
+    .quiz-option.correct { background-color: #2d5016; border-color: #4ade80; }
+    .quiz-option.incorrect { background-color: #4a1c1c; border-color: #ef4444; opacity: 0.6; }
+    .quiz-option.disabled { pointer-events: none; }
+    #quiz-feedback { display: none; }
+    #quiz-feedback.show { display: block; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed-dim selection:text-on-primary-fixed overflow-x-hidden">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-6 h-16 bg-[#fef9f0]/80 backdrop-blur-md z-50 border-b border-[#d0c5b4]/15 shadow-[0_0_40px_rgba(29,28,22,0.06)]">
+  <button id="menu-btn" class="text-[#715915] hover:text-[#e4c375] transition-colors duration-300">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+  <h1 class="font-['Noto_Serif'] font-bold tracking-tight text-[#1d1c16] text-lg">Claveguera, 14</h1>
+  <div class="w-10"></div>
+</header>
+
+<!-- Side Menu -->
+<div id="menu-overlay"></div>
+<nav id="side-menu" class="fixed inset-y-0 left-0 z-[60] bg-[#fef9f0] h-full w-80 border-r border-[#d0c5b4]/10 shadow-2xl -translate-x-full transition-transform duration-400 overflow-y-auto">
+  <div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-outline-variant/20">
+    <span class="font-['Noto_Serif'] font-black text-primary text-lg">Les Cases dels Godes</span>
+    <button id="menu-close" class="text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="px-6 py-6 space-y-8">
+    <div>
+      <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3" data-ca="Idioma" data-es="Idioma">Idioma</p>
+      <div class="flex gap-2">
+        <button class="lang-btn px-4 py-2 text-sm font-label font-semibold border border-outline-variant/30 transition-all" data-lang="ca">Català</button>
+        <button class="lang-btn px-4 py-2 text-sm font-label font-semibold border border-outline-variant/30 transition-all" data-lang="es">Castellano</button>
+      </div>
+    </div>
+    <div>
+      <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3" data-ca="Mida de la lletra" data-es="Tamaño de fuente">Mida de la lletra</p>
+      <div class="flex gap-2">
+        <button class="font-btn px-3 py-2 text-xs font-label font-semibold border border-outline-variant/30 transition-all" data-size="normal">A</button>
+        <button class="font-btn px-3 py-2 text-sm font-label font-semibold border border-outline-variant/30 transition-all" data-size="grande">A+</button>
+        <button class="font-btn px-3 py-2 text-base font-label font-semibold border border-outline-variant/30 transition-all" data-size="extragrande">A++</button>
+      </div>
+    </div>
+    <div>
+      <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-3" data-ca="Equip de recerca" data-es="Equipo de investigación">Equip de recerca</p>
+      <div class="space-y-1 font-body text-sm text-on-surface leading-relaxed">
+        <p>Emili Godes i Faura</p><p>Enric Godes Maté</p><p>Ignasi Palazuelos Salvadó</p><p>Oriol Mestre Campi</p>
+      </div>
+      <div class="space-y-1 font-body text-sm text-on-surface-variant leading-relaxed mt-3">
+        <p>Maria Rosa Godes Diago (+)</p><p>Jesús Mestre Godes (+)</p><p>Montserrat Godes Diago (+)</p><p>Enric Cabestany Carreras (+)</p>
+      </div>
+    </div>
+    <div class="border-t border-outline-variant/20 pt-6">
+      <p class="font-label text-xs text-on-surface-variant" data-ca="Experiència creada per Enric Godes" data-es="Experiencia creada por Enric Godes">Experiència creada per Enric Godes</p>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-24 pb-32 px-4 md:px-12 max-w-4xl mx-auto space-y-20">
+
+  <!-- ============ FACHADA ============ -->
+  <section>
+    <figure>
+      <img class="w-full aspect-[4/3] object-cover sepia-overlay cursor-pointer hover:opacity-90 transition-opacity duration-300 lightbox-img" alt="Carrer Mestres Casals i Martorell" src="../recursos/imagen/claveguera-14/calle.jpg"/>
+      <figcaption class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-3" data-ca="No es conserva la casa original" data-es="No se conserva la casa original">No es conserva la casa original</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ TÍTULO ============ -->
+  <section>
+    <h2 class="font-headline text-5xl md:text-7xl font-black text-on-background leading-tight tracking-tighter">Claveguera, 14 4t <span class="text-primary">(1860-1864)</span></h2>
+  </section>
+
+  <!-- ============ AUDIOGUÍA ============ -->
+  <section class="bg-surface-container p-6 space-y-4">
+    <div class="flex items-center gap-4">
+      <span class="material-symbols-outlined text-2xl text-primary" style="font-variation-settings: 'FILL' 1;">headphones</span>
+      <div>
+        <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold" data-ca="Audioguia" data-es="Audioguía">Audioguia</p>
+        <p class="font-body text-sm text-on-surface-variant" data-ca="Prem play per escoltar la història" data-es="Pulsa play para escuchar la historia">Prem play per escoltar la història</p>
+      </div>
+    </div>
+    <audio id="audio-player" controls preload="none" class="w-full" style="height: 40px;">
+      <source id="audio-source" src="../recursos/audio/claveguera-14-cat.mp3" type="audio/mpeg">
+    </audio>
+  </section>
+
+  <!-- ============ TEXTO INTRODUCTORIO ============ -->
+  <section class="space-y-10">
+    <div class="flex items-center gap-4">
+      <span class="h-px w-12 bg-outline-variant"></span>
+      <p class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold" data-ca="El carrer" data-es="La calle">El carrer</p>
+    </div>
+    <div class="space-y-6">
+      <p class="font-body text-lg text-on-surface leading-relaxed" data-ca="Ens trobem entre els anys 1860 i 1864." data-es="Nos encontramos entre los años 1860 y 1864.">Ens trobem entre els anys 1860 i 1864.</p>
+      <p class="font-body text-lg text-on-surface leading-relaxed" data-ca="La família Godes Caballeria es trasllada a aquest nou habitatge, a pocs minuts de la seva anterior llar, mantenint-se dins del mateix entorn urbà." data-es="La familia Godes Caballeria se traslada a esta nueva vivienda, a pocos minutos de su anterior hogar, manteniéndose dentro del mismo entorno urbano.">La família Godes Caballeria es trasllada a aquest nou habitatge, a pocs minuts de la seva anterior llar, mantenint-se dins del mateix entorn urbà.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed italic" data-ca="L'antic carrer de la Claveguera rep avui el nom de Mestres Casals i Martorell, reflex de com la ciutat ha anat transformant no només els seus espais, sinó també la seva memòria." data-es="La antigua calle de la Claveguera recibe hoy el nombre de Mestres Casals i Martorell, reflejo de cómo la ciudad ha ido transformando no solo sus espacios, sino también su memoria.">L'antic carrer de la Claveguera rep avui el nom de Mestres Casals i Martorell, reflex de com la ciutat ha anat transformant no només els seus espais, sinó també la seva memòria.</p>
+    </div>
+  </section>
+
+  <!-- ============ PLACA ============ -->
+  <section>
+    <figure>
+      <img class="w-full object-cover sepia-overlay cursor-pointer hover:opacity-90 transition-opacity duration-300 lightbox-img" alt="Placa canvi de nom del carrer" src="../recursos/imagen/claveguera-14/placa.jpg"/>
+      <figcaption class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-3" data-ca="Placa explicativa amb el canvi de nom del carrer" data-es="Placa explicativa con el cambio de nombre de la calle">Placa explicativa amb el canvi de nom del carrer</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ HISTORIA FAMILIAR ============ -->
+  <section class="space-y-10">
+    <div class="flex items-center gap-4">
+      <span class="h-px w-12 bg-outline-variant"></span>
+      <p class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold" data-ca="Història familiar" data-es="Historia familiar">Història familiar</p>
+    </div>
+    <div class="space-y-6">
+      <p class="font-body text-lg text-on-surface leading-relaxed" data-ca="En aquesta etapa, Pascual Godes Gomis consolida la seva vida a Barcelona." data-es="En esta etapa, Pascual Godes Gomis consolida su vida en Barcelona.">En aquesta etapa, Pascual Godes Gomis consolida la seva vida a Barcelona.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed" data-ca="Comença a treballar per a Guasch Hermanos, una empresa tèxtil fundada el 1859, en un moment clau de formació industrial a la ciutat." data-es="Empieza a trabajar para Guasch Hermanos, una empresa textil fundada en 1859, en un momento clave de formación industrial en la ciudad.">Comença a treballar per a Guasch Hermanos, una empresa tèxtil fundada el 1859, en un moment clau de formació industrial a la ciutat.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed" data-ca="El sector tèxtil era aleshores un dels motors econòmics de Barcelona, combinant tradició artesanal amb els inicis de la producció industrial." data-es="El sector textil era entonces uno de los motores económicos de Barcelona, combinando tradición artesanal con los inicios de la producción industrial.">El sector tèxtil era aleshores un dels motors econòmics de Barcelona, combinant tradició artesanal amb els inicis de la producció industrial.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed italic" data-ca="De manera significativa, aquesta empresa ha perdurat fins als nostres dies, connectant directament aquella Barcelona del segle XIX amb l'actual." data-es="De forma significativa, esta empresa ha perdurado hasta nuestros días, conectando directamente aquella Barcelona del siglo XIX con la actual.">De manera significativa, aquesta empresa ha perdurat fins als nostres dies, connectant directament aquella Barcelona del segle XIX amb l'actual.</p>
+    </div>
+  </section>
+
+  <!-- ============ GUASCH ============ -->
+  <section>
+    <figure>
+      <img class="w-full object-cover sepia-overlay cursor-pointer hover:opacity-90 transition-opacity duration-300 lightbox-img" alt="Taller tèxtil Guasch Hermanos" src="../recursos/imagen/claveguera-14/guasch.jpg"/>
+      <figcaption class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-3" data-ca="Desconeixem la ubicació exacta del taller" data-es="Desconocemos la ubicación exacta del taller">Desconeixem la ubicació exacta del taller</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ FAMILIA ============ -->
+  <section class="space-y-10 bg-surface-container-low -mx-4 md:-mx-12 px-4 md:px-12 py-16">
+    <div class="max-w-4xl mx-auto space-y-6">
+      <p class="font-body text-lg text-on-surface leading-relaxed" data-ca="Durant aquests anys, el matrimoni forma la seva família." data-es="Durante estos años, el matrimonio forma su familia.">Durant aquests anys, el matrimoni forma la seva família.</p>
+      <p class="font-body text-lg text-on-surface leading-relaxed font-semibold" data-ca="Aquí neix la seva primera filla, Dolors Godes Caballeria." data-es="Aquí nace su primera hija, Dolors Godes Caballeria.">Aquí neix la seva primera filla, Dolors Godes Caballeria.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed" data-ca="Dos anys més tard neix Anna, que lamentablement mor abans de complir el seu primer any de vida." data-es="Dos años más tarde nace Anna, que lamentablemente fallece antes de cumplir su primer año de vida.">Dos anys més tard neix Anna, que lamentablement mor abans de complir el seu primer any de vida.</p>
+    </div>
+  </section>
+
+  <!-- ============ DOLORS TÍTULO ============ -->
+  <section>
+    <h3 class="font-headline text-4xl md:text-5xl font-black text-on-background leading-tight tracking-tighter">Dolors Godes Caballeria</h3>
+  </section>
+
+  <!-- ============ RETRATO DOLORS ============ -->
+  <section>
+    <figure class="max-w-lg mx-auto">
+      <div class="bg-surface-container border border-outline-variant/20 p-4">
+        <img class="w-full aspect-[3/4] object-cover grayscale brightness-90 contrast-125 cursor-pointer hover:opacity-90 transition-opacity duration-300 lightbox-img" alt="Dolors Godes Caballeria" src="../recursos/imagen/claveguera-14/dolors.jpg"/>
+      </div>
+      <figcaption class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-3 text-center" data-ca="1922, Dolors Godes Caballeria, Francesc Ferrer Caparà, Artur Godes Hurtado, Montserrat Godes Diago" data-es="1922, Dolors Godes Caballeria, Francesc Ferrer Caparà, Artur Godes Hurtado, Montserrat Godes Diago">1922, Dolors Godes Caballeria, Francesc Ferrer Caparà, Artur Godes Hurtado, Montserrat Godes Diago</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ BIOGRAFÍA DOLORS ============ -->
+  <section class="space-y-10">
+    <div class="flex items-center gap-4">
+      <span class="h-px w-12 bg-outline-variant"></span>
+      <p class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold" data-ca="Biografia" data-es="Biografía">Biografia</p>
+    </div>
+    <div class="space-y-6">
+      <p class="font-body text-lg text-on-surface leading-relaxed" data-ca="Dolors Godes Caballeria (1860-1935), coneguda a la família com la «tia Dolores» (pronunciat «Doloras»), va ser la filla gran de Pascual Godes Gomis i Rosa Caballeria." data-es="Dolors Godes Caballeria (1860-1935), conocida en la familia como la «tia Dolores» (pronunciado «Doloras»), fue la hija mayor de Pascual Godes Gomis y Rosa Caballeria.">Dolors Godes Caballeria (1860-1935), coneguda a la família com la «tia Dolores» (pronunciat «Doloras»), va ser la filla gran de Pascual Godes Gomis i Rosa Caballeria.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed" data-ca="Es va casar amb Francesc Xavier Ferrer Caparà, conegut com l'«oncle Francisquet», natural de Martorell i dedicat al comerç." data-es="Se casó con Francesc Xavier Ferrer Caparà, conocido como el «oncle Francisquet», natural de Martorell y dedicado al comercio.">Es va casar amb Francesc Xavier Ferrer Caparà, conegut com l'«oncle Francisquet», natural de Martorell i dedicat al comerç.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed" data-ca="A diferència de generacions anteriors, el matrimoni va assolir una bona posició econòmica i va viure en una gran casa al carrer Bertran, 39, en una zona més acomodada de la ciutat." data-es="A diferencia de generaciones anteriores, el matrimonio alcanzó una buena posición económica y vivió en una gran casa en el carrer Bertran, 39, en una zona más acomodada de la ciudad.">A diferència de generacions anteriors, el matrimoni va assolir una bona posició econòmica i va viure en una gran casa al carrer Bertran, 39, en una zona més acomodada de la ciutat.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed" data-ca="No obstant això, la seva història també va estar marcada per la tragèdia. Van perdre dos fills: un va morir sent un nadó, i un altre va morir de forma accidental en un succés dramàtic amb la seva cuidadora." data-es="Sin embargo, su historia también estuvo marcada por la tragedia. Perdieron a dos hijos: uno falleció siendo un bebé, y otro murió de forma accidental en un suceso dramático con su cuidadora.">No obstant això, la seva història també va estar marcada per la tragèdia. Van perdre dos fills: un va morir sent un nadó, i un altre va morir de forma accidental en un succés dramàtic amb la seva cuidadora.</p>
+      <p class="font-body text-base text-on-surface-variant leading-relaxed italic" data-ca="Malgrat aquestes pèrdues, Dolors va mantenir sempre un vincle molt estret amb la resta de la família Godes, exercint un paper central dins del nucli familiar al llarg de la seva vida." data-es="A pesar de estas pérdidas, Dolors mantuvo siempre un vínculo muy estrecho con el resto de la familia Godes, desempeñando un papel central dentro del núcleo familiar a lo largo de su vida.">Malgrat aquestes pèrdues, Dolors va mantenir sempre un vincle molt estret amb la resta de la família Godes, exercint un paper central dins del nucli familiar al llarg de la seva vida.</p>
+    </div>
+  </section>
+
+  <!-- ============ CONTEXTO ============ -->
+  <section>
+    <div class="bg-surface-container p-10 relative border-l-4 border-primary/20">
+      <div class="absolute top-4 right-4 opacity-10"><span class="material-symbols-outlined text-6xl">gavel</span></div>
+      <h3 class="font-headline text-2xl font-bold mb-4 flex items-center gap-2">
+        <span class="w-8 h-[1px] bg-primary"></span>
+        <span data-ca="Context Espanya" data-es="Contexto España">Context Espanya</span>
+      </h3>
+      <div class="space-y-4 text-on-surface-variant leading-relaxed">
+        <p data-ca="En aquests anys, Espanya viu una etapa de transició marcada per la consolidació de l'Estat liberal i el desenvolupament desigual de l'economia." data-es="En estos años, España vive una etapa de transición marcada por la consolidación del Estado liberal y el desarrollo desigual de la economía.">En aquests anys, Espanya viu una etapa de transició marcada per la consolidació de l'Estat liberal i el desenvolupament desigual de l'economia.</p>
+        <p data-ca="Després del període moderat, el país s'encamina cap a una creixent inestabilitat política. La industrialització avança, però de forma irregular, generant importants desigualtats socials." data-es="Tras el periodo moderado, el país se encamina hacia una creciente inestabilidad política. La industrialización avanza, pero de forma irregular, generando importantes desigualdades sociales.">Després del període moderat, el país s'encamina cap a una creixent inestabilitat política. La industrialització avança, però de forma irregular, generant importants desigualtats socials.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="max-w-3xl mx-auto bg-[#2b251e] border border-[#a68942]/30 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative vellum-texture">
+    <div class="text-center mb-10">
+      <span class="material-symbols-outlined text-[#e4c375] text-4xl mb-4" style="font-variation-settings: 'FILL' 1;">help_center</span>
+      <h2 class="font-headline text-3xl font-bold italic mb-2 text-[#f2ede4]" data-ca="Consulta de l'Arxiver" data-es="Consulta del Archivero">Consulta de l'Arxiver</h2>
+      <div class="h-px w-24 bg-[#a68942]/50 mx-auto"></div>
+    </div>
+    <p class="font-headline text-xl text-center mb-10 text-[#f2ede4]" data-ca="A la Barcelona de mitjan segle XIX, quin percentatge aproximat de nens no superava el primer any de vida?" data-es="En la Barcelona de mediados del siglo XIX, ¿qué porcentaje aproximado de niños no superaba el primer año de vida?">A la Barcelona de mitjan segle XIX, quin percentatge aproximat de nens no superava el primer any de vida?</p>
+    <div id="quiz-options" class="space-y-4 mb-8">
+      <button class="quiz-option w-full text-left p-5 border border-[#a68942]/20 hover:bg-[#3d342a] transition-all group flex justify-between items-center active:scale-[0.98]" data-correct="false">
+        <span class="font-body font-semibold text-[#f2ede4]" data-ca="Aproximadament el 5%" data-es="Aproximadamente el 5%">Aproximadament el 5%</span>
+        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 text-[#e4c375] transition-opacity">arrow_forward</span>
+      </button>
+      <button class="quiz-option w-full text-left p-5 border border-[#a68942]/20 hover:bg-[#3d342a] transition-all group flex justify-between items-center active:scale-[0.98]" data-correct="false">
+        <span class="font-body font-semibold text-[#f2ede4]" data-ca="Aproximadament el 15%" data-es="Aproximadamente el 15%">Aproximadament el 15%</span>
+        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 text-[#e4c375] transition-opacity">arrow_forward</span>
+      </button>
+      <button class="quiz-option w-full text-left p-5 border border-[#a68942]/20 hover:bg-[#3d342a] transition-all group flex justify-between items-center active:scale-[0.98]" data-correct="true">
+        <span class="font-body font-semibold text-[#f2ede4]" data-ca="Aproximadament el 25%" data-es="Aproximadamente el 25%">Aproximadament el 25%</span>
+        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 text-[#e4c375] transition-opacity">arrow_forward</span>
+      </button>
+    </div>
+    <div id="quiz-feedback" class="mb-8 p-6 border border-[#a68942]/30">
+      <p id="feedback-result" class="font-headline text-lg font-bold mb-3 text-[#f2ede4]"></p>
+      <p id="feedback-text" class="font-body text-sm text-[#d0c5b4] leading-relaxed"></p>
+    </div>
+    <div class="flex justify-center">
+      <a id="quiz-continue" href="#" class="bg-[#a68942] text-[#f2ede4] px-10 py-4 font-label uppercase tracking-widest font-black hover:bg-[#8c712d] transition-colors shadow-lg active:scale-95 opacity-50 pointer-events-none no-underline inline-block text-center" data-ca="Continuar" data-es="Continuar">Continuar</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-[#f2ede4] z-50 border-t border-[#d0c5b4]/20">
+  <a class="flex flex-col items-center justify-center text-[#4d4639] opacity-60 hover:opacity-100 transition-all duration-300" href="#">
+    <span class="material-symbols-outlined">auto_stories</span>
+    <span class="font-['Manrope'] text-[10px] uppercase tracking-widest font-semibold mt-1" data-ca="Arxiu" data-es="Archivo">Arxiu</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#715915] scale-110" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+    <span class="font-['Manrope'] text-[10px] uppercase tracking-widest font-semibold mt-1" data-ca="Mapa" data-es="Mapa">Mapa</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#4d4639] opacity-60 hover:opacity-100 transition-all duration-300" href="#">
+    <span class="material-symbols-outlined">timeline</span>
+    <span class="font-['Manrope'] text-[10px] uppercase tracking-widest font-semibold mt-1" data-ca="Cronologia" data-es="Cronología">Cronologia</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#4d4639] opacity-60 hover:opacity-100 transition-all duration-300" href="#">
+    <span class="material-symbols-outlined">edit_note</span>
+    <span class="font-['Manrope'] text-[10px] uppercase tracking-widest font-semibold mt-1" data-ca="Diari" data-es="Diario">Diari</span>
+  </a>
+</nav>
+
+<!-- Lightbox -->
+<div id="lightbox"><img id="lightbox-img" src="" alt=""></div>
+
+<script src="../js/shared.js"></script>
+<script>
+  // Audio - switch source on language change
+  const AUDIO_SRC = { ca: '../recursos/audio/claveguera-14-cat.mp3', es: '../recursos/audio/claveguera-14-esp.mp3' };
+  const audioPlayer = document.getElementById('audio-player');
+  const audioSource = document.getElementById('audio-source');
+  function updateAudioSrc() {
+    const l = localStorage.getItem('lang') || 'ca';
+    audioSource.src = AUDIO_SRC[l];
+    audioPlayer.load();
+  }
+  updateAudioSrc();
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', updateAudioSrc);
+  });
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.lightbox-img').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src; lightboxImg.alt = img.alt;
+      lightbox.classList.add('show');
+    });
+  });
+  lightbox.addEventListener('click', () => lightbox.classList.remove('show'));
+
+  // Quiz
+  const lang = () => localStorage.getItem('lang') || 'ca';
+  const FEEDBACK = {
+    ca: {
+      correct: 'Correcte!',
+      incorrect: 'No exactament...',
+      explanation: 'La mortalitat infantil era molt elevada a causa de múltiples factors: falta d\'higiene i sanejament, malalties infeccioses, alimentació deficient i condicions de vida precàries. Era habitual que una part important dels nens no arribés al primer any de vida, cosa que marcava profundament la vida de les famílies.'
+    },
+    es: {
+      correct: '¡Correcto!',
+      incorrect: 'No exactamente...',
+      explanation: 'La mortalidad infantil era muy elevada debido a múltiples factores: falta de higiene y saneamiento, enfermedades infecciosas, alimentación deficiente y condiciones de vida precarias. Era habitual que una parte importante de los niños no alcanzara el primer año de vida, lo que marcaba profundamente la vida de las familias.'
+    }
+  };
+  let quizAnswered = false;
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      const isCorrect = btn.dataset.correct === 'true';
+      const fb = FEEDBACK[lang()];
+      document.querySelectorAll('.quiz-option').forEach(b => {
+        b.classList.add('disabled');
+        if (b.dataset.correct === 'true') b.classList.add('correct');
+        else if (b === btn && !isCorrect) b.classList.add('incorrect');
+      });
+      document.getElementById('feedback-result').textContent = isCorrect ? fb.correct : fb.incorrect;
+      document.getElementById('feedback-text').textContent = fb.explanation;
+      document.getElementById('quiz-feedback').classList.add('show');
+      const cb = document.getElementById('quiz-continue');
+      cb.classList.remove('opacity-50', 'pointer-events-none');
+    });
+  });
+</script>
+
+</body></html>
