@@ -125,7 +125,9 @@
     <span class="material-symbols-outlined">menu</span>
   </button>
   <h1 class="font-['Noto_Serif'] font-bold tracking-tight text-[#1d1c16] text-lg" data-ca="Cronologia" data-es="Cronología">Cronologia</h1>
-  <div class="w-10"></div>
+  <button onclick="history.back()" class="text-[#715915] hover:text-[#e4c375] transition-colors duration-300">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </button>
 </header>
 
 <!-- Side Menu -->
@@ -176,7 +178,7 @@
       <span class="h-px w-12 bg-outline-variant"></span>
       <p class="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold" data-ca="Registre Familiar" data-es="Registro Familiar">Registre Familiar</p>
     </div>
-    <h2 class="font-headline text-4xl md:text-5xl font-black text-on-background leading-tight tracking-tighter mb-4" data-ca="Les Cases dels <span class='text-primary'>Godes Caballeria</span>" data-es="Las Casas de los <span class='text-primary'>Godes Caballeria</span>">Les Cases dels <span class="text-primary">Godes Caballeria</span></h2>
+    <h2 class="font-headline text-4xl md:text-5xl font-black text-on-background leading-tight tracking-tighter mb-4" data-ca="Les Cases dels <span class='text-primary'>Godes</span>" data-es="Las Casas de los <span class='text-primary'>Godes</span>">Les Cases dels <span class="text-primary">Godes</span></h2>
     <p class="font-body text-lg text-on-surface-variant leading-relaxed" data-ca="El recorregut de la família pels carrers de la Barcelona del segle XIX." data-es="El recorrido de la familia por las calles de la Barcelona del siglo XIX.">El recorregut de la família pels carrers de la Barcelona del segle XIX.</p>
   </section>
 
@@ -206,6 +208,24 @@
   <!-- Timeline -->
   <section class="relative">
     <div class="timeline-line"></div>
+
+    <!-- 1852 — Pascual viaja a Barcelona -->
+    <div class="relative pl-14 pb-14">
+      <div class="timeline-dot active" style="top: 0.25rem;">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">directions_walk</span>
+      </div>
+      <div class="timeline-card bg-surface-container-high p-5 border-l-4 border-primary">
+        <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-1" data-ca="Viatge" data-es="Viaje">Viatge</p>
+        <p class="font-headline text-2xl font-bold text-primary mb-2">1852</p>
+        <p class="font-body text-base text-on-surface leading-relaxed" data-ca="Pascual Godes viatja de Castelló de la Plana a Barcelona." data-es="Pascual Godes viaja de Castellón de la Plana a Barcelona.">Pascual Godes viatja de Castelló de la Plana a Barcelona.</p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="inline-flex items-center gap-1 bg-primary/10 px-2 py-1 font-label text-[10px] uppercase tracking-widest text-primary font-bold">
+            <span class="material-symbols-outlined" style="font-size: 12px;">flight_land</span>
+            <span data-ca="Arribada a Barcelona" data-es="Llegada a Barcelona">Arribada a Barcelona</span>
+          </span>
+        </div>
+      </div>
+    </div>
 
     <!-- 1854 — Context -->
     <div class="relative pl-14 pb-14">
